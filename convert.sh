@@ -48,46 +48,6 @@ fi
 cd "$diretorio"
 ######### SALVAR O DIRETORIO ATUAL ################
 currentdir=`pwd`
-dbusRef=`kdialog --progressbar "Iniciando ..." 12`
-qdbus $dbusRef Set "" value 1 ; sleep 1
-qdbus $dbusRef setLabelText "verificando a existencia de arquivos jpg" ;
-######## VERIFICAR SE EXISTE ARQUIVOS JPG #######################
-N_JPG=`find -iname "*.jpg" | wc -l`
-if [ "$N_JPG" -eq "0" ]
-  then
-  kdialog --title "verificando a existencia de arquivos" --msgbox "Não existe arquivos jpg! Abortado..."
-  exit 1
-fi
-qdbus $dbusRef Set "" value 2 ; sleep 1
-######## CONVERTER MAIÚSCUAS PARA MINUSCUALAS#######################
-N_JPG=`find -name "*.JPG" | wc -l`
-if [ "$N_JPG" -gt "0" ]
-then
-  qdbus $dbusRef setLabelText "Convertendo de maiúsculo para minúsculo"
-  for ARQ in *.JPG; do
-    mv "$ARQ" "`echo $ARQ | tr [A-Z] [a-z]`" 
-  done
-else
-  kdialog --title "CONVERÇÃO" --msgbox "Não existe JPG para converter \n de maiúsculo para minúsculo! Continuando..."
-  sleep 1
-fi
-qdbus $dbusRef Set "" value 3 ; sleep 1
-qdbus $dbusRef setLabelText "removendo arquivos indesejáveis"
-########## REMOVE ARQUIVOS INDESEJÁVEIS ##########################
-N_HTML=`find -iname "*.html" | wc -l`
-if [ "$N_HTML" -gt "0" ] # testa se html é maior que zero
-    then
-    rm *.{html,HTML}
-    else
-    echo "Não existe html!..."
-fi
-N_PNG=`find -iname "*.png" | wc -l`
-if [ "$N_PNG" -gt "0" ]
-    then
-    rm *.{png,PNG}
-    else
-    echo "Não existe png!..."
-fi
 qdbus $dbusRef Set "" value 4 ; sleep 1
 ############ RENOMEANDO SLIDES POR ORDEM ALFABETICA #####################
 N_IMG=`find -iname "img*" | wc -l`
@@ -155,6 +115,7 @@ qdbus $dbusRef setLabelText "concluindo..."
 ##############################################################################
 qdbus $dbusRef close
 kdialog --msgbox "Ok, Slides convertidos!"
+##############################################################################
 #copiar para pendrive
 kdialog --yesno "Deseja salvar os slides no PENDRIVE agora? \n Escolha o caminho. "
 if [ "$?" = "0" ]; then
